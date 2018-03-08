@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Javascript validation</title>
+    <link rel="stylesheet" href="dist/css/form-validation.css"/>
+  </head>
+  <body>
+    <div class="wrapper">
+      <h1>JavaScript Form validation, no plugins, no jQuery</h1>
+      <h2>How to use</h2>
+      <ol>
+        <li><h4>Add class</h4> -  Give your HTML form element the css class 'form-validate' to apply, like this: 
+        <code>&lt;form class="form-validate"&gt;</code></li>
+        <li><h4>Add JavaScript</h4> - Include the javascript file from the dist folder at the bottom of 
+          your HTML, before the closing body tag, like this:
+          <code>&lt;script src="form-validation.min.js"&gt;&lt;/script&gt;</code>. 
+          Or include the javascript file from the src folder to your preprocessor 
+          package. This src file is ES2015, so you will need Babel or another converter</li>
+        <li><h4>Add CSS</h4> - Grap from the sccs files in the src/scss folder what you need. 
+          Include at least this CSS to your project (make it more specific if needed): 
+          <code><pre>
+.is-hidden {
+    display: none;
+    visibility: hidden;
+}</pre></code>
+        </li>
+      </ol>
+      
+      <form id="myform" class="form-validate">
+        
+        <div class="form-line">
+          <label for="typetext">type=text</label>
+          <div class="form-fields">
+            <input type="text" name="typetext" id="typetext" required="required" />
+            <span class="form-note"></span>
+            <span class="form-required"></span>
+          </div>
+        </div>
+
+        <!-- <div class="form-line">
+          <label for="notrequired">type=text, not required</label>
+          <div class="form-fields">
+            <input type="text" name="notrequired" id="notrequired" />
+            <span class="form-note"></span>
+            <span class="form-required"></span>
+          </div>
+        </div> -->
+
+        <!-- <div class="form-line">
+          <label for="missingstuff">type=text, id and name is missing</label>
+          <div class="form-fields">
+            <input type="text" required="required" />
+            <span class="form-note"></span>
+            <span class="form-required"></span>
+          </div>
+        </div> -->
+
+        <div class="form-line">
+          <label for="emailaddress">type=email</label>
+          <div class="form-fields">
+            <input type="email" id="emailaddress" required="required"  />
+            <span class="form-note"></span>
+            <span class="form-required"></span>
+          </div>
+        </div>
+
+        <div class="form-line">
+          <label for="phonenumber">type=tel</label>
+          <div class="form-fields">
+            <input type="tel" id="phonenumber" required="required" />
+            <span class="form-note"></span>
+            <span class="form-required"></span>
+          </div>
+        </div>
+
+        <!-- <div class="form-line">
+          <label for="phonenumberpattern">type=tel, with pattern</label>
+          <div class="form-fields">
+            <input type="tel" id="phonenumberpattern" required="required" pattern="^[0-9\s\-\+\.\/]{6,}$" />
+            <span class="form-note">pattern = ^[0-9\s\-\+\.\/]{6,}$</span>
+            <span class="form-required"></span>
+          </div>
+        </div> -->
+
+        <!-- <div class="form-line">
+          <label for="minlength3">type=text, minlength=3</label>
+          <div class="form-fields">
+            <input type="text" id="minlength3" minlength="3" required="required" />
+            <span class="form-note"></span>
+            <span class="form-required"></span>
+          </div>
+        </div> -->
+
+        <div class="form-line">
+          <label for="date">type=date</label>
+          <div class="form-fields">
+            <input type="date" id="date" required="required" />
+            <span class="form-note"></span>
+            <span class="form-required"></span>
+          </div>
+        </div> 
+
+        <!-- <div class="form-line">
+          <label for="datepattern">type=date, with pattern</label>
+          <div class="form-fields">
+            <input type="date" id="datepattern" required="required" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" />
+            <span class="form-note">pattern = [0-9]{4}-[0-9]{2}-[0-9]{2}</span>
+            <span class="form-required"></span>
+          </div>
+        </div>  -->
+
+        <div class="form-line">
+          <label for="textarea">textarea</label>
+          <div class="form-fields">
+            <textarea id="textarea" required="required"></textarea>
+            
+            <span class="form-note"></span>
+            <span class="form-required"></span>
+          </div>
+        </div> 
+
+        <div class="form-line">
+          <label for="dropdown">select</label>
+          <div class="form-fields">
+            <select id="dropdown" required>
+              <option value="">please select</option>
+              <option value="first">first option</option>
+              <option value="second">second option</option>
+              <option value="third">third option</option>
+              <option value="fourth">fourth option</option>
+            </select>
+            <span class="form-note">
+                Be sure to add the first option with an empty value to make the validation work, like this: 
+                <code>&lt;option value=""&gt;please select&lt;/option&gt;</code>
+            </span>
+            <span class="form-required"></span>
+          </div>
+        </div>
+
+        <div class="form-line">
+          <label>radios</label>
+          <div class="form-fields">
+            <div class="form-radio">
+                <input type="radio" name="radio" id="radio-1" required="required">
+                <label for="radio-1">Yes</label>
+            </div>
+            <div class="form-radio">
+              <input type="radio" name="radio" id="radio-2" required="required">
+              <label for="radio-2">No</label>
+            </div>
+            <div class="form-radio">
+              <input type="radio" name="radio" id="radio-3" required="required">
+              <label for="radio-3">Other</label>
+            </div>
+            <span class="form-note"></span>
+            <span class="form-required"></span>
+          </div>
+        </div>
+
+        <div class="form-line">
+          <label>checkboxes</label>
+          <div class="form-fields">
+            <div class="form-checkbox">
+                <input type="checkbox" name="checkbox" id="checkbox-1" required="required">
+                <label for="checkbox-1">Yes</label>
+            </div>
+            <span class="form-note"></span>
+            <span class="form-required"></span>
+          </div>
+        </div>
+
+        <div class="form-line">
+          <div class="form-fields">
+            <button type="submit">Submit form</button>
+          </div>
+        </div>
+      </form>
+
+      <br/><br/>
+      <h2>Error messages</h2>
+      <p>By default the error messages come from the browser itself (in the 
+        language set by the user) and do not need to be specified. 
+        What is really cool and handy, because you don't need to manage this 
+        content at all, awesome! If you need custom messages from a CMS, 
+        read futher for instructions. 
+      </p>
+      <h3>Custom error messages from a CMS (optional)</h3>
+      <p>Add a data attribute to the field element, 
+        <code>data-validation-message-*</code> where the * must correspond 
+        with the correct validaty value. Most used will probably be 
+        'valuemissing' and 'typemismatch' (e-mailaddresses), 
+        Example: <code>&lt;input type="text" 
+        data-validation-message-valuemissing="Your custom message for 
+        value missing" id="myinput" /&gt;</code>
+      </p>
+      
+      <form id="myform" class="form-validate">
+
+        <div class="form-line">
+          <label for="typetextcustom">type=text</label>
+          <div class="form-fields">
+            <input type="text" name="typetextcustom" id="typetextcustom" required="required" data-validation-message-valuemissing="Custom message for valueMissing" />
+            <span class="form-note"></span>
+            <span class="form-required"></span>
+          </div>
+        </div>
+
+        <div class="form-line">
+          <label for="emailaddresscustom">type=email</label>
+          <div class="form-fields">
+            <input type="email" value="incorrect e-mail" id="emailaddresscustom" required="required" data-validation-message-valuemissing="Custom message for valueMissing" data-validation-message-typemismatch="Custom message for typeMismatch" />
+            <span class="form-note"></span>
+            <span class="form-required"></span>
+          </div>
+        </div>
+
+        <div class="form-line">
+          <div class="form-fields">
+            <button type="submit">Submit form</button>
+          </div>
+        </div>
+
+      </form>
+    
+      <h3>Custom error messages static from JavaScript (not recommended)</h3>
+      <p>Another option is static error messages defined in JavaScript by your team/client.
+        I would't do this, only if the other two options are absolutely not possible.
+        In that case, edit the <code>form-validation.js</code> file. Uncomment 
+        the rules in the <code>errorMessages</code> object and edit the values 
+        as you wish. Or you can place this following JavaScript code somewhere (in another 
+        JavaScript file). Place here your static custom texts for error messages.</p>
+      <code>
+        <pre>
+formValidation.errorMessages = {
+  badInput: 'type error message here',
+  customError: 'type error message here',
+  patternMismatch: 'type error message here',
+  rangeOverflow: 'type error message here',
+  rangeUnderflow: 'type error message here',
+  stepMismatch: 'type error message here',
+  tooLong: 'type error message here',
+  tooShort: 'type error message here',
+  typeMismatch: 'type error message here',
+  valueMissing: 'type error message here'
+}
+        </pre>
+      </code>
+      
+
+
+
+    </div>
+    
+
+	<script src="dist/js/form-validation.js"></script>
+  </body>
+</html>

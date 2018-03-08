@@ -1,0 +1,38 @@
+.is-hidden {
+    display: none;
+    visibility: hidden;
+}
+
+input, select, textarea {
+    &:required:valid {
+        border: solid 1px green;
+    }
+}
+:required {
+    ~ .form-required {
+        
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: block;
+        width: 15px;
+        height: 15px;
+        color: #e00;
+        &:after {
+            content: '*';
+            display: block;
+        }
+    }
+    &:valid ~ .form-required {
+        color: #0a0;
+        &:after {
+            content: '✓';
+        }
+    }
+}
+.has-error {
+    border: solid 1px #e00;
+}
+.form-error-message {
+    color: #e00;
+}

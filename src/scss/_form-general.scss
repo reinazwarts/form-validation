@@ -1,0 +1,70 @@
+input, select, textarea {
+    width: 100%;
+    padding: 1rem;
+    border: solid 1px grey;
+    background-color: #fff;
+    font-size: 100%;
+    font-family: Arial, sans-serif;
+}
+[type=radio], [type=checkbox] {
+    border: 0;
+    padding: 0;
+    width: auto;
+    background-color: transparent;
+}
+button {
+    padding: .75rem 1.5rem;
+    background-color: rgb(0, 61, 173);
+    color: white;
+    font-weight: bold;
+	font-size: 1.6rem;
+    cursor: pointer;
+    &:hover {
+        background-color: rgb(0, 39, 112);
+    }
+}
+label {
+    display: block;
+    [type=radio] ~ &,
+    [type=checkbox] ~ & {
+        display: inline-block;
+        font-weight: normal;
+    }
+}
+form {
+	margin-bottom: 3rem;
+}
+
+.form-line {
+    padding: 10px 20px;
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+
+    &:nth-child(odd) {
+        background-color: #dce4ff;
+    }
+    &:nth-child(even) {
+        background-color: #eaf0ff;
+    }
+    > label {
+        float: left;
+        width: 40%;
+        padding-right: 1rem;
+        text-align: right;
+        &[for] {
+            padding-top: 1rem;
+        }
+    }
+}
+.form-fields {
+    float: right;
+    width: 60%;
+}
+.form-note {
+    font-size: 1.2rem;
+    color: #666;
+    code {
+        font-size: 1.4rem;
+    }
+}
