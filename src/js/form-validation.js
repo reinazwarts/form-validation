@@ -7,7 +7,8 @@
     cssClassForm: 'form-validate',
     cssClassErrorField: 'has-error',
     cssClassErrorMessage: 'form-error-message',
-    cssClassHiddenMessage: 'is-hidden'
+    cssClassHiddenMessage: 'is-hidden',
+    cssClassValidField: 'is-valid'
   }
   const init = function() {
     // get all forms to disable validation, to be able to customize
@@ -178,20 +179,26 @@
     // if not valid
     return errorMessageHandler(field, fieldValidity);
   }
+
+
   const validateField = function(event) {
     // Only run if the field is in a form to be validated
-    if(event.target.form) {
+    const field = event.target;
+    if(field.form) {
 
-      if (!hasClass(event.target.form, settings.cssClassForm)) return;
-      let error = errorHandler(event.target);
+      if (!hasClass(field.form, settings.cssClassForm)) return;
+      const error = errorHandler(field);
 
       if(error) {
-        addError(event.target, error);
-        return;
+        addError(field, error);
+      } else {
+        field.classList.add(settings.cssClassValidField);
+        removeError(field);
       }
-      removeError(event.target);
     }
   }
+
+
   const validateForm = function(event) {
     // Check all fields on submit
     // Only run on forms flagged for validation
@@ -241,3 +248,5 @@
   document.addEventListener('DOMContentLoaded', init);
 
 })();
+
+export {formValidation};
