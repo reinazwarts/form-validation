@@ -1,6 +1,4 @@
-﻿let formValidation = formValidation || {};
-
-(function() {
+﻿window.formValidation = window.formValidation || (function() {
   'use strict';
   
   const settings = {
@@ -10,6 +8,8 @@
     cssClassHiddenMessage: 'is-hidden',
     cssClassValidField: 'is-valid'
   }
+
+
   const init = function() {
     // get all forms to disable validation, to be able to customize
     const forms = document.querySelectorAll('.' + settings.cssClassForm);
@@ -39,6 +39,8 @@
     });
 
   }
+
+
   const addError = function(field, error) {
     field.classList.add(settings.cssClassErrorField);
     field.classList.add('had-error');
@@ -89,6 +91,8 @@
     // Show error message
     fieldMessage.classList.remove(settings.cssClassHiddenMessage);
   } 
+
+
   const removeError = function(field) {
     // Remove error class to field
     field.classList.remove(settings.cssClassErrorField);
@@ -113,6 +117,8 @@
     fieldMessage.innerHTML = '';
     fieldMessage.classList.add(settings.cssClassHiddenMessage);
   }
+
+
   const groupRadio = function(field, action) {
     // If the field is a radio button and part of a group
     const group = document.getElementsByName(field.name);
@@ -133,6 +139,8 @@
     }
     return {field, action};
   }
+
+
   const errorMessageHandler = function(field, fieldValidity) {
     // init variable
     let errorMessage = '';
@@ -149,9 +157,9 @@
         if (customErrorMessage) {
           // if there is a custom error message
           errorMessage = customErrorMessage;
-        } else if (formValidation.errorMessages !== undefined && formValidation.errorMessages[key] !== undefined && formValidation.errorMessages[key] !== '') {
+        } else if (errorMessages !== undefined && errorMessages[key] !== undefined && errorMessages[key] !== '') {
           // if there are predefined messages in js
-          errorMessage = formValidation.errorMessages[key];
+          errorMessage = errorMessages[key];
         } else if (field.validationMessage !== undefined && field.validationMessage !== '') {
           // else take standard browser validation messages from browser API
           errorMessage = field.validationMessage;
@@ -166,6 +174,8 @@
 
     return errorMessage;
   }
+
+
   const errorHandler = function(field) {
     // Don't validate submits, buttons, file and reset inputs, and disabled fields
     if (field.disabled || field.type === 'file' || field.type === 'reset' || field.type === 'submit' || field.type === 'button') return;
@@ -228,7 +238,9 @@
     
     // Otherwise, let the form submit normally
   }
-  formValidation.errorMessages = {
+
+
+  const errorMessages = {
     // badInput: 'badInput',
     // customError: 'customError',
     // patternMismatch: 'patternMismatch',
@@ -240,13 +252,20 @@
     // typeMismatch: 'typeMismatch',
     // valueMissing: 'valueMissing'
   }
+
+
   const hasClass = function(element, cls) {
     // helper function for IE10 support
     return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
   }
 
+  // define public vars and functions that can be accessed from outside
+  const publicVarsAndFunctions = {
+    settings,
+    errorMessages
+  }
+
   document.addEventListener('DOMContentLoaded', init);
+  return publicVarsAndFunctions;
 
 })();
-
-export {formValidation};
