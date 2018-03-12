@@ -19,11 +19,13 @@
       <ol>
         <li><h4>Add class</h4> -  Give your HTML form element the css class 'form-validate' to apply, like this: 
         <code>&lt;form class="form-validate"&gt;</code></li>
+        <li><h4>Add required</h4> -  Give the required HTML fields element the required attribute to make it... required :)<br/> 
+        <code>&lt;input type="text" required id="myinput" /&gt;</code>.</li>
         <li><h4>Add JavaScript</h4> - Include the javascript file from the dist folder at the bottom of 
           your HTML, before the closing body tag, like this:
           <code>&lt;script src="form-validation.min.js"&gt;&lt;/script&gt;</code>. 
           Or include the javascript file from the src folder to your preprocessor 
-          package. This src file is ES2015, so you will need Babel or another converter</li>
+          package. This src file is ES2015, so you will need Babel or another converter.</li>
         <li><h4>Add CSS</h4> - Grap from the sccs files in the src/scss folder what you need. 
           Include at least this CSS to your project (make it more specific if needed): 
           <code><pre>
@@ -192,6 +194,7 @@
         content at all, awesome! If you need custom messages from a CMS, 
         read futher for instructions. 
       </p>
+      <br/><br/>
       <h3>Custom error messages from a CMS (optional)</h3>
       <p>Add a data attribute to the field element, 
         <code>data-validation-message-*</code> where the * must correspond 
@@ -202,7 +205,7 @@
         value missing" id="myinput" /&gt;</code>
       </p>
       
-      <form id="myform" class="form-validate">
+      <form id="myform2" class="form-validate">
 
         <div class="form-line">
           <label for="typetextcustom">type=text</label>
@@ -229,7 +232,7 @@
         </div>
 
       </form>
-    
+      <br/><br/>
       <h3>Custom error messages static from JavaScript (not recommended)</h3>
       <p>Another option is static error messages defined in JavaScript by your team/client.
         I would't do this, only if the other two options are absolutely not possible.
@@ -254,6 +257,87 @@ formValidation.errorMessages = {
         </pre>
       </code>
       
+      <br/><br/>
+      <h2>More examples</h2>
+
+      <form id="myform3" class="form-validate">
+
+        <div class="form-line">
+          <label for="notrequired">type=text, not required</label>
+          <div class="form-fields">
+            <input type="text" name="notrequired" id="notrequired" />
+            <span class="form-note"></span>
+            <span class="form-required"></span>
+          </div>
+        </div>
+
+        <div class="form-line">
+          <label for="missingstuff">type=text, id and name is missing</label>
+          <div class="form-fields">
+            <input type="text" required="required" />
+            <span class="form-note"></span>
+            <span class="form-required"></span>
+          </div>
+        </div>
+
+        <div class="form-line">
+          <label for="phonenumberpattern">type=tel, with pattern</label>
+          <div class="form-fields">
+            <input type="tel" id="phonenumberpattern" required="required" pattern="^[0-9\s\-\+\.\/]{6,}$" />
+            <span class="form-note">pattern = ^[0-9\s\-\+\.\/]{6,}$</span>
+            <span class="form-required"></span>
+          </div>
+        </div>
+
+        <div class="form-line">
+          <label for="minlength3">type=text, minlength=3</label>
+          <div class="form-fields">
+            <input type="text" id="minlength3" minlength="3" required="required" />
+            <span class="form-note"></span>
+            <span class="form-required"></span>
+          </div>
+        </div>
+
+        <div class="form-line">
+          <label for="datepattern">type=text, with pattern</label>
+          <div class="form-fields">
+            <input type="text" id="datepattern" required="required" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" />
+            <span class="form-note">pattern = [0-9]{4}-[0-9]{2}-[0-9]{2}</span>
+            <span class="form-required"></span>
+          </div>
+        </div> 
+
+        <div class="form-line">
+          <div class="form-fields">
+            <button type="submit">Submit form</button>
+          </div>
+        </div>
+      </form>
+
+      <br/><br/>
+      <h2>Form default</h2>
+      <form id="myform4">
+
+        <div class="form-line">
+          <label for="default">type=text</label>
+          <div class="form-fields">
+            <input type="text" name="default" id="default" required="required" />
+            <span class="form-note"></span>
+            <span class="form-required"></span>
+          </div>
+        </div>
+
+
+
+        <div class="form-line">
+          <div class="form-fields">
+            <button type="submit">Submit form</button>
+          </div>
+        </div>
+      </form>
+      <br/><br/><br/><br/><br/><br/>
+
+
 
 
 

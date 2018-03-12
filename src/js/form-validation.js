@@ -8,9 +8,7 @@
     cssClassHiddenMessage: 'is-hidden',
     cssClassValidField: 'is-valid'
   }
-
-
-  const init = function() {
+  const init = () => {
     // get all forms to disable validation, to be able to customize
     const forms = document.querySelectorAll('.' + settings.cssClassForm);
     for (let i = 0; i < forms.length; i++) {
@@ -19,13 +17,13 @@
 
     document.addEventListener('blur', validateField, true);
 
-    document.addEventListener('click', function(event){
+    document.addEventListener('click', (event) => {
       if(event.target.type === 'radio' || event.target.type === 'checkbox') {
         validateField(event);
       }
     });
 
-    document.addEventListener('change', function(event){
+    document.addEventListener('change', (event) => {
       if(event.target.type === 'select-one') {
         validateField(event);
       }
@@ -33,15 +31,13 @@
 
     document.addEventListener('submit', validateForm, false);
 
-    document.addEventListener('keyup', function(event){
+    document.addEventListener('keyup', (event) => {
       if (!hasClass(event.target, 'had-error')) return;
       validateField(event);
     });
 
   }
-
-
-  const addError = function(field, error) {
+  const addError = (field, error) => {
     field.classList.add(settings.cssClassErrorField);
     field.classList.add('had-error');
 
@@ -53,7 +49,7 @@
     // Get field id or name
     let fieldId = field.id || field.name;
     if (!fieldId) {
-      console.log(field + ' has no id and name attribute');
+      console.log(field + ' Please give each field element an id or name attribute');
       return;
     }
 
@@ -91,9 +87,7 @@
     // Show error message
     fieldMessage.classList.remove(settings.cssClassHiddenMessage);
   } 
-
-
-  const removeError = function(field) {
+  const removeError = (field) => {
     // Remove error class to field
     field.classList.remove(settings.cssClassErrorField);
 
@@ -117,9 +111,7 @@
     fieldMessage.innerHTML = '';
     fieldMessage.classList.add(settings.cssClassHiddenMessage);
   }
-
-
-  const groupRadio = function(field, action) {
+  const groupRadio = (field, action) => {
     // If the field is a radio button and part of a group
     const group = document.getElementsByName(field.name);
     if (group.length > 0) {
@@ -139,9 +131,7 @@
     }
     return {field, action};
   }
-
-
-  const errorMessageHandler = function(field, fieldValidity) {
+  const errorMessageHandler = (field, fieldValidity) => {
     // init variable
     let errorMessage = '';
     let customErrorMessage = '';
@@ -174,9 +164,7 @@
 
     return errorMessage;
   }
-
-
-  const errorHandler = function(field) {
+  const errorHandler = (field) => {
     // Don't validate submits, buttons, file and reset inputs, and disabled fields
     if (field.disabled || field.type === 'file' || field.type === 'reset' || field.type === 'submit' || field.type === 'button') return;
 
@@ -189,9 +177,7 @@
     // if not valid
     return errorMessageHandler(field, fieldValidity);
   }
-
-
-  const validateField = function(event) {
+  const validateField = (event) => {
     // Only run if the field is in a form to be validated
     const field = event.target;
     if(field.form) {
@@ -207,9 +193,7 @@
       }
     }
   }
-
-
-  const validateForm = function(event) {
+  const validateForm = (event) => {
     // Check all fields on submit
     // Only run on forms flagged for validation
     if (!hasClass(event.target, settings.cssClassForm)) return;
@@ -252,9 +236,7 @@
     // typeMismatch: 'typeMismatch',
     // valueMissing: 'valueMissing'
   }
-
-
-  const hasClass = function(element, cls) {
+  const hasClass = (element, cls) => {
     // helper function for IE10 support
     return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
   }
