@@ -13,7 +13,7 @@
     const forms = document.querySelectorAll('.' + settings.cssClassForm);
     for (let i = 0; i < forms.length; i++) {
         forms[i].setAttribute('novalidate', true);
-    }
+    }   
 
     document.addEventListener('blur', validateField, true);
 
@@ -24,7 +24,7 @@
     });
 
     document.addEventListener('change', (event) => {
-      if(event.target.type === 'select-one') {
+      if(event.target.type === 'select-one' || event.target.type === 'date') {
         validateField(event);
       }
     });
@@ -39,6 +39,7 @@
   }
   const addError = (field, error) => {
     field.classList.add(settings.cssClassErrorField);
+    field.classList.remove(settings.cssClassValidField);
     field.classList.add('had-error');
 
     if (field.type === 'radio' && field.name) {
@@ -90,6 +91,7 @@
   const removeError = (field) => {
     // Remove error class to field
     field.classList.remove(settings.cssClassErrorField);
+    field.classList.add(settings.cssClassValidField);
 
     if (field.type === 'radio' && field.name) {
       const lastRadioFieldOfGroup = groupRadio(field, 'remove');
@@ -188,7 +190,6 @@
       if(error) {
         addError(field, error);
       } else {
-        field.classList.add(settings.cssClassValidField);
         removeError(field);
       }
     }
