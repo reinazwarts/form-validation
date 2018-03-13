@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Javascript validation</title>
     <link rel="stylesheet" href="dist/css/form-validation.css"/>
   </head>
@@ -12,7 +13,7 @@
       <ul>
         <li>Uses existing browser validation API</li>
         <li>No need to create error messages, they are there already (in the users browser language)</li>
-        <li>It’s minified size is 3kb (jQuery validation plugin is 23kb)</li>
+        <li>It’s minified size is 4kb (jQuery validation plugin is 23kb)</li>
         <li>Implementation is very easy</li>
       </ul>
       <h2>How to use</h2>
@@ -47,24 +48,6 @@
           </div>
         </div>
 
-        <!-- <div class="form-line">
-          <label for="notrequired">type=text, not required</label>
-          <div class="form-fields">
-            <input type="text" name="notrequired" id="notrequired" />
-            <span class="form-note"></span>
-            <span class="form-required"></span>
-          </div>
-        </div> -->
-
-        <!-- <div class="form-line">
-          <label for="missingstuff">type=text, id and name is missing</label>
-          <div class="form-fields">
-            <input type="text" required="required" />
-            <span class="form-note"></span>
-            <span class="form-required"></span>
-          </div>
-        </div> -->
-
         <div class="form-line">
           <label for="emailaddress">type=email</label>
           <div class="form-fields">
@@ -83,24 +66,6 @@
           </div>
         </div>
 
-        <!-- <div class="form-line">
-          <label for="phonenumberpattern">type=tel, with pattern</label>
-          <div class="form-fields">
-            <input type="tel" id="phonenumberpattern" required="required" pattern="^[0-9\s\-\+\.\/]{6,}$" />
-            <span class="form-note">pattern = ^[0-9\s\-\+\.\/]{6,}$</span>
-            <span class="form-required"></span>
-          </div>
-        </div> -->
-
-        <!-- <div class="form-line">
-          <label for="minlength3">type=text, minlength=3</label>
-          <div class="form-fields">
-            <input type="text" id="minlength3" minlength="3" required="required" />
-            <span class="form-note"></span>
-            <span class="form-required"></span>
-          </div>
-        </div> -->
-
         <div class="form-line">
           <label for="date">type=date</label>
           <div class="form-fields">
@@ -109,15 +74,6 @@
             <span class="form-required"></span>
           </div>
         </div> 
-
-        <!-- <div class="form-line">
-          <label for="datepattern">type=date, with pattern</label>
-          <div class="form-fields">
-            <input type="date" id="datepattern" required="required" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" />
-            <span class="form-note">pattern = [0-9]{4}-[0-9]{2}-[0-9]{2}</span>
-            <span class="form-required"></span>
-          </div>
-        </div>  -->
 
         <div class="form-line">
           <label for="textarea">textarea</label>
@@ -151,15 +107,15 @@
           <label>radios</label>
           <div class="form-fields">
             <div class="form-radio">
-                <input type="radio" name="radio" id="radio-1" required="required">
+                <input type="radio" name="radiogroup" id="radio-1" required="required">
                 <label for="radio-1">Yes</label>
             </div>
             <div class="form-radio">
-              <input type="radio" name="radio" id="radio-2" required="required">
+              <input type="radio" name="radiogroup" id="radio-2" required="required">
               <label for="radio-2">No</label>
             </div>
             <div class="form-radio">
-              <input type="radio" name="radio" id="radio-3" required="required">
+              <input type="radio" name="radiogroup" id="radio-3" required="required">
               <label for="radio-3">Other</label>
             </div>
             <span class="form-note"></span>
@@ -281,6 +237,15 @@ formValidation.errorMessages = {
         </div>
 
         <div class="form-line">
+          <label for="number">type=number</label>
+          <div class="form-fields">
+            <input type="number" id="number" required="required" />
+            <span class="form-note"></span>
+            <span class="form-required"></span>
+          </div>
+        </div>
+
+        <div class="form-line">
           <label for="phonenumberpattern">type=tel, with pattern</label>
           <div class="form-fields">
             <input type="tel" id="phonenumberpattern" required="required" pattern="^[0-9\s\-\+\.\/]{6,}$" />
@@ -293,7 +258,16 @@ formValidation.errorMessages = {
           <label for="minlength3">type=text, minlength=3</label>
           <div class="form-fields">
             <input type="text" id="minlength3" minlength="3" required="required" />
-            <span class="form-note"></span>
+            <span class="form-note">Minlength is not supported by Internet Explorer and Edge</span>
+            <span class="form-required"></span>
+          </div>
+        </div>
+
+        <div class="form-line">
+          <label for="maxlength5">type=text, maxlength=5</label>
+          <div class="form-fields">
+            <input type="text" id="maxlength5" maxlength="5" required="required" />
+            <span class="form-note">Use this with care</span>
             <span class="form-required"></span>
           </div>
         </div>

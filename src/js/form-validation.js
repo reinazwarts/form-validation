@@ -1,20 +1,19 @@
-﻿const formValidation = formValidation || {};
-
-(function() {
+﻿window.formValidation = window.formValidation || (function() {
   'use strict';
   
   const settings = {
     cssClassForm: 'form-validate',
     cssClassErrorField: 'has-error',
     cssClassErrorMessage: 'form-error-message',
-    cssClassHiddenMessage: 'is-hidden'
+    cssClassHiddenMessage: 'is-hidden',
+    cssClassValidField: 'is-valid'
   }
   const init = () => {
     // get all forms to disable validation, to be able to customize
     const forms = document.querySelectorAll('.' + settings.cssClassForm);
     for (let i = 0; i < forms.length; i++) {
         forms[i].setAttribute('novalidate', true);
-    }
+    }   
 
     document.addEventListener('blur', validateField, true);
 
@@ -25,7 +24,7 @@
     });
 
     document.addEventListener('change', (event) => {
-      if(event.target.type === 'select-one') {
+      if(event.target.type === 'select-one' || event.target.type === 'date') {
         validateField(event);
       }
     });
@@ -40,6 +39,7 @@
   }
   const addError = (field, error) => {
     field.classList.add(settings.cssClassErrorField);
+    field.classList.remove(settings.cssClassValidField);
     field.classList.add('had-error');
 
     if (field.type === 'radio' && field.name) {
@@ -91,6 +91,7 @@
   const removeError = (field) => {
     // Remove error class to field
     field.classList.remove(settings.cssClassErrorField);
+    field.classList.add(settings.cssClassValidField);
 
     if (field.type === 'radio' && field.name) {
       const lastRadioFieldOfGroup = groupRadio(field, 'remove');
@@ -148,9 +149,9 @@
         if (customErrorMessage) {
           // if there is a custom error message
           errorMessage = customErrorMessage;
-        } else if (formValidation.errorMessages !== undefined && formValidation.errorMessages[key] !== undefined && formValidation.errorMessages[key] !== '') {
+        } else if (errorMessages !== undefined && errorMessages[key] !== undefined && errorMessages[key] !== '') {
           // if there are predefined messages in js
-          errorMessage = formValidation.errorMessages[key];
+          errorMessage = errorMessages[key];
         } else if (field.validationMessage !== undefined && field.validationMessage !== '') {
           // else take standard browser validation messages from browser API
           errorMessage = field.validationMessage;
@@ -180,16 +181,17 @@
   }
   const validateField = (event) => {
     // Only run if the field is in a form to be validated
-    if(event.target.form) {
+    const field = event.target;
+    if(field.form) {
 
-      if (!hasClass(event.target.form, settings.cssClassForm)) return;
-      let error = errorHandler(event.target);
+      if (!hasClass(field.form, settings.cssClassForm)) return;
+      const error = errorHandler(field);
 
       if(error) {
-        addError(event.target, error);
-        return;
+        addError(field, error);
+      } else {
+        removeError(field);
       }
-      removeError(event.target);
     }
   }
   const validateForm = (event) => {
@@ -221,7 +223,9 @@
     
     // Otherwise, let the form submit normally
   }
-  formValidation.errorMessages = {
+
+
+  const errorMessages = {
     // badInput: 'badInput',
     // customError: 'customError',
     // patternMismatch: 'patternMismatch',
@@ -238,6 +242,13 @@
     return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
   }
 
+  // define public vars and functions that can be accessed from outside
+  const publicVarsAndFunctions = {
+    settings,
+    errorMessages
+  }
+
   document.addEventListener('DOMContentLoaded', init);
+  return publicVarsAndFunctions;
 
 })();
