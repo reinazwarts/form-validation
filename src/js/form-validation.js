@@ -1,13 +1,12 @@
-﻿const formValidation = formValidation || {};
-
-(function() {
+﻿window.formValidation = window.formValidation || (function() {
   'use strict';
   
   const settings = {
     cssClassForm: 'form-validate',
     cssClassErrorField: 'has-error',
     cssClassErrorMessage: 'form-error-message',
-    cssClassHiddenMessage: 'is-hidden'
+    cssClassHiddenMessage: 'is-hidden',
+    cssClassValidField: 'is-valid'
   }
   const init = () => {
     // get all forms to disable validation, to be able to customize
@@ -148,9 +147,9 @@
         if (customErrorMessage) {
           // if there is a custom error message
           errorMessage = customErrorMessage;
-        } else if (formValidation.errorMessages !== undefined && formValidation.errorMessages[key] !== undefined && formValidation.errorMessages[key] !== '') {
+        } else if (errorMessages !== undefined && errorMessages[key] !== undefined && errorMessages[key] !== '') {
           // if there are predefined messages in js
-          errorMessage = formValidation.errorMessages[key];
+          errorMessage = errorMessages[key];
         } else if (field.validationMessage !== undefined && field.validationMessage !== '') {
           // else take standard browser validation messages from browser API
           errorMessage = field.validationMessage;
@@ -180,16 +179,18 @@
   }
   const validateField = (event) => {
     // Only run if the field is in a form to be validated
-    if(event.target.form) {
+    const field = event.target;
+    if(field.form) {
 
-      if (!hasClass(event.target.form, settings.cssClassForm)) return;
-      let error = errorHandler(event.target);
+      if (!hasClass(field.form, settings.cssClassForm)) return;
+      const error = errorHandler(field);
 
       if(error) {
-        addError(event.target, error);
-        return;
+        addError(field, error);
+      } else {
+        field.classList.add(settings.cssClassValidField);
+        removeError(field);
       }
-      removeError(event.target);
     }
   }
   const validateForm = (event) => {
@@ -221,7 +222,9 @@
     
     // Otherwise, let the form submit normally
   }
-  formValidation.errorMessages = {
+
+
+  const errorMessages = {
     // badInput: 'badInput',
     // customError: 'customError',
     // patternMismatch: 'patternMismatch',
@@ -238,6 +241,13 @@
     return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
   }
 
+  // define public vars and functions that can be accessed from outside
+  const publicVarsAndFunctions = {
+    settings,
+    errorMessages
+  }
+
   document.addEventListener('DOMContentLoaded', init);
+  return publicVarsAndFunctions;
 
 })();
