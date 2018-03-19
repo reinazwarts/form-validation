@@ -266,6 +266,7 @@
       });
   }
   const postponeBlurHandlingUntilMouseup = () => {
+    // do not validate the field that caused the blur event until mouse button is up
     blurHandlingPostponed = true;
     document.addEventListener('mouseup', handlePostponedBlurEvents);
   }
