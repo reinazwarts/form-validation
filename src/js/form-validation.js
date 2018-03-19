@@ -9,6 +9,8 @@
     cssClassValidField: 'is-valid',
     cssClassValidForm: 'form-is-valid'
   };
+  let blurHandlingPostponed = false,
+    postponedBlurEvents = [];
   const init = () => {
     // get all forms to disable validation, to be able to customize
     const forms = document.querySelectorAll('.' + settings.cssClassForm);
@@ -16,7 +18,14 @@
         const form = forms[i];
         form.setAttribute('novalidate', true);
 
-        form.addEventListener('blur', validateField, true);
+        // form.addEventListener('blur', validateField, true);
+        form.addEventListener('blur', (event) => {
+          if (blurHandlingPostponed) {
+            postponedBlurEvents.push(event);
+          } else {
+            validateField(event);
+          }
+        }, true);
 
         form.addEventListener('click', (event) => {
           if(event.target.type === 'radio' || event.target.type === 'checkbox') {
@@ -29,6 +38,7 @@
             validateField(event);
           }
         });
+        initSubmitClick(form);
     
         form.addEventListener('submit', submitForm, false);
     
@@ -183,7 +193,6 @@
   };
   const validateField = (event) => {
     // Only run if the field is in a form to be validated
-    event.stopPropagation();
     const field = event.target,
       form = field.form;
     if(form) {
@@ -246,7 +255,28 @@
       event.preventDefault();
       check.firstErrorField.focus();
     }
+    event.preventDefault();
   };
+  const initSubmitClick = (form) => {
+    // when you click on the submit button and have an error, the blur event causes an error message to appear. This possibly makes the rest of the form move down a bit, thus moving the submit button away from under your mouse. When you then release the mouse, it won't be registered as a submit, since "you" moved your mouse out of the button...
+    const submitButtonsNodelist = form.querySelectorAll('[type="submit"], button:not([type])'),
+      submitButtonsArray = [].slice.call(submitButtonsNodelist);
+      submitButtonsArray.forEach((btn) => {
+        btn.addEventListener('mousedown', postponeBlurHandlingUntilMouseup);
+      });
+  }
+  const postponeBlurHandlingUntilMouseup = () => {
+    blurHandlingPostponed = true;
+    document.addEventListener('mouseup', handlePostponedBlurEvents);
+  }
+  const handlePostponedBlurEvents = () => {
+    // remove the event listener that called this function
+    document.removeEventListener('mouseup', handlePostponedBlurEvents);
+    // now handle postponed events
+    postponedBlurEvents.forEach((event) => {
+      validateField(event);
+    });
+  }
 
 
   const errorMessages = {
