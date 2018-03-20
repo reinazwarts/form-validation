@@ -6,37 +6,49 @@
     cssClassErrorField: 'has-error',
     cssClassErrorMessage: 'form-error-message',
     cssClassHiddenMessage: 'is-hidden',
-    cssClassValidField: 'is-valid'
-  }
+    cssClassValidField: 'is-valid',
+    cssClassValidForm: 'form-is-valid'
+  };
+  let blurHandlingPostponed = false,
+    postponedBlurEvents = [];
   const init = () => {
     // get all forms to disable validation, to be able to customize
     const forms = document.querySelectorAll('.' + settings.cssClassForm);
     for (let i = 0; i < forms.length; i++) {
-        forms[i].setAttribute('novalidate', true);
+        const form = forms[i];
+        form.setAttribute('novalidate', true);
+
+        // form.addEventListener('blur', validateField, true);
+        form.addEventListener('blur', (event) => {
+          if (blurHandlingPostponed) {
+            postponedBlurEvents.push(event);
+          } else {
+            validateField(event);
+          }
+        }, true);
+
+        form.addEventListener('click', (event) => {
+          if(event.target.type === 'radio' || event.target.type === 'checkbox') {
+            validateField(event);
+          }
+        });
+    
+        form.addEventListener('change', (event) => {
+          if(event.target.type === 'select-one' || event.target.type === 'date') {
+            validateField(event);
+          }
+        });
+        initSubmitClick(form);
+    
+        form.addEventListener('submit', submitForm, false);
+    
+        form.addEventListener('keyup', (event) => {
+          if (!hasClass(event.target, 'had-error')) return;
+          validateField(event);
+        });
     }   
+  };
 
-    document.addEventListener('blur', validateField, true);
-
-    document.addEventListener('click', (event) => {
-      if(event.target.type === 'radio' || event.target.type === 'checkbox') {
-        validateField(event);
-      }
-    });
-
-    document.addEventListener('change', (event) => {
-      if(event.target.type === 'select-one' || event.target.type === 'date') {
-        validateField(event);
-      }
-    });
-
-    document.addEventListener('submit', validateForm, false);
-
-    document.addEventListener('keyup', (event) => {
-      if (!hasClass(event.target, 'had-error')) return;
-      validateField(event);
-    });
-
-  }
   const addError = (field, error) => {
     field.classList.add(settings.cssClassErrorField);
     field.classList.remove(settings.cssClassValidField);
@@ -87,7 +99,7 @@
 
     // Show error message
     fieldMessage.classList.remove(settings.cssClassHiddenMessage);
-  } 
+  };
   const removeError = (field) => {
     // Remove error class to field
     field.classList.remove(settings.cssClassErrorField);
@@ -112,7 +124,7 @@
     // If so, hide it
     fieldMessage.innerHTML = '';
     fieldMessage.classList.add(settings.cssClassHiddenMessage);
-  }
+  };
   const groupRadio = (field, action) => {
     // If the field is a radio button and part of a group
     const group = document.getElementsByName(field.name);
@@ -132,7 +144,7 @@
       field = group[group.length - 1];
     }
     return {field, action};
-  }
+  };
   const errorMessageHandler = (field, fieldValidity) => {
     // init variable
     let errorMessage = '';
@@ -165,7 +177,7 @@
     }
 
     return errorMessage;
-  }
+  };
   const errorHandler = (field) => {
     // Don't validate submits, buttons, file and reset inputs, and disabled fields
     if (field.disabled || field.type === 'file' || field.type === 'reset' || field.type === 'submit' || field.type === 'button') return;
@@ -178,13 +190,13 @@
 
     // if not valid
     return errorMessageHandler(field, fieldValidity);
-  }
+  };
   const validateField = (event) => {
     // Only run if the field is in a form to be validated
-    const field = event.target;
-    if(field.form) {
+    const field = event.target,
+      form = field.form;
+    if(form) {
 
-      if (!hasClass(field.form, settings.cssClassForm)) return;
       const error = errorHandler(field);
 
       if(error) {
@@ -192,36 +204,79 @@
       } else {
         removeError(field);
       }
+
+      // check if whole form is valid already, without adding errors
+      validateForm(form, false);
     }
-  }
-  const validateForm = (event) => {
-    // Check all fields on submit
-    // Only run on forms flagged for validation
-    if (!hasClass(event.target, settings.cssClassForm)) return;
+  };
+  const validateForm = (form, addErrors = true) => {
+    // Check all fields, and optionally add errors
 
     // Get all of the form elements
-    let fields = event.target.elements;
+    let fields = form.elements;
 
     // Validate each field
     // Store the first field with an error to a variable so we can bring it into focus later
-    let error, hasErrors;
+    let isValid = true,
+      error,
+      firstErrorField;
+      
     for (let i = 0; i < fields.length; i++) {
         error = errorHandler(fields[i]);
         if (error) {
-            addError(fields[i], error);
-            if (!hasErrors) {
-                hasErrors = fields[i];
+            isValid = false;
+            if (addErrors) {
+              addError(fields[i], error);
+            }
+            if (!firstErrorField) {
+                firstErrorField = fields[i];
             }
         }
     }
 
-    // If there are errrors, don't submit form and focus on first element with error
-    if (hasErrors) {
-      event.preventDefault();
-      hasErrors.focus();
+    if (isValid) {
+      form.classList.add(settings.cssClassValidForm);
+    } else {
+      form.classList.remove(settings.cssClassValidForm);
     }
+
+    return {
+      isValid,
+      firstErrorField
+    };
     
     // Otherwise, let the form submit normally
+  };
+  const submitForm = (event) => {
+    const form = event.target,
+      check = validateForm(form);
+    if (!check.isValid) {
+      // If there are errors, don't submit form and focus on first element with error
+      event.preventDefault();
+      check.firstErrorField.focus();
+    }
+    event.preventDefault();
+  };
+  const initSubmitClick = (form) => {
+    // when you click on the submit button and have an error, the blur event causes an error message to appear. This possibly makes the rest of the form move down a bit, thus moving the submit button away from under your mouse. When you then release the mouse, it won't be registered as a submit, since "you" moved your mouse out of the button...
+    const submitButtonsNodelist = form.querySelectorAll('[type="submit"], button:not([type])'),
+      submitButtonsArray = [].slice.call(submitButtonsNodelist);
+      submitButtonsArray.forEach((btn) => {
+        btn.addEventListener('mousedown', postponeBlurHandlingUntilMouseup);
+      });
+  }
+  const postponeBlurHandlingUntilMouseup = () => {
+    // do not validate the field that caused the blur event until mouse button is up
+    blurHandlingPostponed = true;
+    document.addEventListener('mouseup', handlePostponedBlurEvents);
+  }
+  const handlePostponedBlurEvents = () => {
+    // remove the event listener that called this function
+    document.removeEventListener('mouseup', handlePostponedBlurEvents);
+    // now handle postponed events
+    postponedBlurEvents.forEach((event) => {
+      validateField(event);
+    });
   }
 
 
@@ -236,17 +291,17 @@
     // tooShort: 'tooShort',
     // typeMismatch: 'typeMismatch',
     // valueMissing: 'valueMissing'
-  }
+  };
   const hasClass = (element, cls) => {
     // helper function for IE10 support
     return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
-  }
+  };
 
   // define public vars and functions that can be accessed from outside
   const publicVarsAndFunctions = {
     settings,
     errorMessages
-  }
+  };
 
   document.addEventListener('DOMContentLoaded', init);
   return publicVarsAndFunctions;
