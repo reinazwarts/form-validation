@@ -28,7 +28,7 @@
           <code>&lt;script src="form-validation.min.js"&gt;&lt;/script&gt;</code>. 
           Or include the javascript file from the src folder to your preprocessor 
           package. This src file is ES2015, so you will need Babel or another converter.</li>
-        <li><h4>Add CSS</h4> - Grap from the sccs files in the src/scss folder what you need. 
+        <li><h4>Add CSS</h4> - Grab from the sccs files in the src/scss folder what you need. 
           Include at least this CSS to your project (make it more specific if needed): 
           <code><pre>
 .is-hidden {
@@ -290,8 +290,48 @@ formValidation.errorMessages = {
       </form>
 
       <br/><br/>
-      <h2>Form default</h2>
-      <form id="myform4">
+      <h2>Styling examples</h2>
+      <p>
+        fields below are styled with the <code>is-valid</code> class
+      </p>
+
+      <form id="myform4" class="form-validate">
+     
+        <div class="form-line">
+          <label for="myform-4-required">type=text, required <span>*</span></label>
+          <div class="form-fields">
+            <input type="text" name="myform-4-required" id="myform-4-required"  required="required">
+            <span class="form-note"></span>
+          </div>
+        </div>
+
+        <div class="form-line">
+          <label for="myform-4-notrequired">type=text, not required</label>
+          <div class="form-fields">
+            <span class="form-required"></span>
+            <input type="text" name="myform-4-notrequired" id="myform-4-notrequired" />
+            <span class="form-note"></span>
+          </div>
+        </div>
+
+        <div class="form-line">
+            <label for="myform-4-required2">type=text, required <span>*</span></label>
+            <div class="form-fields">
+              <input type="text" name="myform-4-required2" id="myform-4-required2"  required="required">
+              <span class="form-note"></span>
+            </div>
+          </div>
+
+        <div class="form-line">
+          <div class="form-fields">
+            <button type="submit">Submit form</button>
+          </div>
+        </div>
+      </form>
+
+      <br/><br/>
+      <h2>Form default (no validation)</h2>
+      <form id="myform5">
 
         <div class="form-line">
           <label for="default">type=text</label>

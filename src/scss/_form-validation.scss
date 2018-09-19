@@ -36,3 +36,7 @@ input, select, textarea {
 .form-error-message {
     color: #e00;
 }
+.is-valid[required] {
+    border-color: green;
+    background: rgba(0,255,0,0.2);
+}

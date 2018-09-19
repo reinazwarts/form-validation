@@ -9,6 +9,8 @@
     cssClassValidField: 'is-valid',
     cssClassValidForm: 'form-is-valid'
   };
+  // specify input types that don't have to be checked
+  const discardedTypes = ['submit', 'reset', 'button'];
   let blurHandlingPostponed = false,
     postponedBlurEvents = [];
   const init = () => {
@@ -195,7 +197,7 @@
     // Only run if the field is in a form to be validated
     const field = event.target,
       form = field.form;
-    if(form) {
+    if(form && !discardedTypes.includes(field.type)) {
 
       const error = errorHandler(field);
 
@@ -222,15 +224,19 @@
       firstErrorField;
       
     for (let i = 0; i < fields.length; i++) {
-        error = errorHandler(fields[i]);
-        if (error) {
-            isValid = false;
-            if (addErrors) {
-              addError(fields[i], error);
-            }
-            if (!firstErrorField) {
-                firstErrorField = fields[i];
-            }
+        const field = fields[i];
+
+        if (!discardedTypes.includes(field.type)) {
+          error = errorHandler(field);
+          if (error) {
+              isValid = false;
+              if (addErrors) {
+                addError(field, error);
+              }
+              if (!firstErrorField) {
+                  firstErrorField = field;
+              }
+          }
         }
     }
 
